@@ -15,7 +15,8 @@ namespace Aris.ServerTest.Models
     {
         public const string PLAY_LINK = "play";
         public const string SELF_LINK = "_self";
-        
+        public const string FREE_SPIN = "free_spins";
+
 
         public KoreGame()
         {
@@ -56,6 +57,10 @@ namespace Aris.ServerTest.Models
         [JsonProperty("medal")]
         public KoreMedal Medal { get; set; }
 
+        [JsonProperty("attributes")]
+        public KoreAttribute Attributes { get; set; }
+        
+
         public string PlayGameLink
         {
             get
@@ -80,6 +85,21 @@ namespace Aris.ServerTest.Models
                     !string.IsNullOrEmpty(this.Links[SELF_LINK].Url))
                 {
                     return this.Links[SELF_LINK].Url;
+                }
+
+                return null;
+            }
+        }
+
+        public string FreeSpins
+        {
+            get
+            {
+                if (this.Attributes != null &&
+                    this.Attributes.Lines != null &&
+                    !string.IsNullOrEmpty(this.Attributes.Lines))
+                {
+                    return this.Attributes.Lines;
                 }
 
                 return null;
