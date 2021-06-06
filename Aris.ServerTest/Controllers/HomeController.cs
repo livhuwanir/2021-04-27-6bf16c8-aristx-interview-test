@@ -23,6 +23,10 @@ namespace Aris.ServerTest.Controllers
             var viewModel = new ViewModels.GamesListViewModel();
             var games = await _gameService.GetGamesAsync(GetAuthToken(), returnUrl);
 
+            var categories = games.GroupBy(cat => cat.Category).Select(grp => grp.First().Category).ToList();
+            SelectList categoryList = new SelectList(categories, "Name");
+            ViewBag.categoryList = categoryList;
+
             //Order by Category, then Platform then Name
             viewModel.Games = games.OrderBy(s => s.Category).ThenBy(x => x.Platform).ThenBy(x => x.Name); 
 

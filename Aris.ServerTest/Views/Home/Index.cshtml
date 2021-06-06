@@ -12,11 +12,11 @@
         <div class="form-inline float-right">
             <label class="my-1 mr-2" for="category-filter">Category</label>
             <select id="category-filter" name="category-filter" class="custom-select" onchange="onCategoryChange(this)">
-                <option>---</option>
-                <option>videoslots</option>
-                <option>videopokers</option>
-                <option>tablegames</option>
-                <option>other</option>
+                <option value="all">Choose a category</option>
+                @foreach (var category in ViewBag.categoryList)
+                {
+                    <option value="@category.Text">@category.Text</option>
+                }
             </select>
         </div>
     </div>
@@ -38,46 +38,50 @@
         <tbody>
             @foreach (var game in Model.Games)
             {
-<tr>
-    <td>
+                <tr>
+                    <td>
 
-        @if (game.PlayGameLink != null)
-        {
-<a href="@game.PlayGameLink">@game.Name</a> }
-else
-{
-@game.Name}
+                        @if (game.PlayGameLink != null)
+                        {
+                            <a href="@game.PlayGameLink">@game.Name</a> 
+                        }
+                        else
+                        {
+                            @game.Name
+                        }
 
+                        @if (game.Medal != null)
+                        {
+                            @if (game.Medal.Level == 0)
+                            {
+                            <span class="badge blue-medal">*</span> }
+                            else if (game.Medal.Level == 1)
+                            {
+                            <span class="badge bronze-medal">*</span> }
+                            else if (game.Medal.Level == 2)
+                            {
+                            <span class="badge silver-medal">*</span> }
+                            else if (game.Medal.Level == 3)
+                            {
+                            <span class="badge gold-medal">*</span> }
+                            else if (game.Medal.Level == 3)
+                            {
+                            <span class="badge diamond-medal">*</span>}
+                        }
 
-        @if (game.Medal != null)
-        {
-@if (game.Medal.Level == 0)
-{
-<span class="badge blue-medal">*</span> }
-else if (game.Medal.Level == 1)
-{
-<span class="badge bronze-medal">*</span> }
-else if (game.Medal.Level == 2)
-{
-<span class="badge silver-medal">*</span> }
-else if (game.Medal.Level == 3)
-{
-<span class="badge gold-medal">*</span> }
-else if (game.Medal.Level == 3)
-{
-<span class="badge diamond-medal">*</span>}}
-
-        (<a class="info-link" href="#" data-url="Home/Details?game=@game.Base64GameLink">Info</a>)
-    </td>
-    <td>@game.Category</td>
-    <td>@game.Provider</td>
-    <td>@game.Platform</td>
-    <td>
-        @if (game.FreeSpins != null)
-        {
-@game.FreeSpins}
-    </td>
-</tr>}
+                        (<a class="info-link" href="#" data-url="Home/Details?game=@game.Base64GameLink">Info</a>)
+                    </td>
+                    <td>@game.Category</td>
+                    <td>@game.Provider</td>
+                    <td>@game.Platform</td>
+                    <td>
+                        @if (game.FreeSpins != null)
+                        {
+                            @game.FreeSpins
+                        }
+                    </td>
+                </tr>
+            }
 
         </tbody>
     </table>
@@ -86,8 +90,5 @@ else if (game.Medal.Level == 3)
 
 @section Scripts {
     <script src="~/js/games.js"></script>
-    <script>
-       
-    </script>
 }
 
