@@ -21,14 +21,19 @@ namespace Aris.ServerTest.Controllers
         public async Task<IActionResult> Index(string catFilter, string returnUrl)
         {
             var viewModel = new ViewModels.GamesListViewModel();
-            var games = await _gameService.GetGamesAsync(GetAuthToken(), returnUrl);
+            var games = await _gameService.GetGamesAsync(GetAuthToken(), returnUrl);  
 
             var categories = games.GroupBy(cat => cat.Category).Select(grp => grp.First().Category).ToList();
             SelectList categoryList = new SelectList(categories, "Name");
             ViewBag.categoryList = categoryList;
 
+            if (catFilter != null && catFilter != "all")
+            {
+                games = games.Where(f => f.Category.Equals(catFilter)).ToList();
+            }
+
             //Order by Category, then Platform then Name
-            viewModel.Games = games.OrderBy(s => s.Category).ThenBy(x => x.Platform).ThenBy(x => x.Name); 
+            viewModel.Games = games.OrderBy(s => s.Category).ThenBy(x => x.Platform).ThenBy(x => x.Name);
 
             return View(viewModel);
         }
